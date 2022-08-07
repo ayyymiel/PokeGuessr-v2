@@ -1,13 +1,18 @@
 import * as React from 'react';
-import './index.css';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
+
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+
+import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 import Typography from '@mui/material/Typography';
 
@@ -21,7 +26,7 @@ export default function App() {
   return (
     <ThemeProvider theme={generalTheme}>
       <CssBaseline />
-          <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1 }}>
           <AppBar position="static">
             <Toolbar>
               <IconButton
@@ -43,15 +48,34 @@ export default function App() {
           </AppBar>
         </Box>
 
-        <Box component="img" sx={{
-          height: 233,
-          width: 350,
-          maxHeight: { xs: 233, md: 167 },
-          maxWidth: { xs: 350, md: 250 },
-        }}
-        src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"> 
-
-        </Box>
+        <Stack>
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Box
+              component="img"
+              display="flex" 
+              alignItems="center"
+              justifyContent="center"
+              sx ={{width: '10%',
+                height: '10%',
+                pt: 10
+              }}
+              src="https://lh3.googleusercontent.com/jTa4FrUwEXqPDoU0oCwALwZi8zQNWDnBcQTlFKcjw8N2WrpMpBWYRfh8ep01b9jaJWId3juig56Pf5johs-II6JDckFusUrv6qrboA=w600"
+            />
+            <Typography sx={{
+              pt: 5, pb: 5
+              }}>
+                Who's that Pokemon?
+            </Typography>
+            <TextField id="filled-basic" label="Enter a Guess!" variant="filled" />
+            <Button variant="submit" sx={{p: 2}}>Submit</Button>
+          </Grid>
+        </Stack>
+          
     </ThemeProvider>
   );
 }
