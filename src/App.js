@@ -13,8 +13,13 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
 
 import Typography from '@mui/material/Typography';
+
+const pokemon = 'Charizard';
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+let randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
 
 const generalTheme = createTheme({
   palette: {
@@ -23,6 +28,16 @@ const generalTheme = createTheme({
 });
 
 export default function App() {
+
+  const getLetterLibrary = () => {
+    let letterLibrary = [];
+    for (let i=0; i <= 12; i++) {
+      letterLibrary.push(randomLetter);
+    };
+    for (let i=0; i <= 12; i++) {
+      <Button variant="outlined" size="medium">letterLibrary[i]</Button>
+    }
+  }
   return (
     <ThemeProvider theme={generalTheme}>
       <CssBaseline />
@@ -56,23 +71,46 @@ export default function App() {
             alignItems="center"
           >
             <Box
-              component="img"
-              display="flex" 
-              alignItems="center"
-              justifyContent="center"
-              sx ={{width: '10%',
-                height: '10%',
-                pt: 10
-              }}
-              src="https://lh3.googleusercontent.com/jTa4FrUwEXqPDoU0oCwALwZi8zQNWDnBcQTlFKcjw8N2WrpMpBWYRfh8ep01b9jaJWId3juig56Pf5johs-II6JDckFusUrv6qrboA=w600"
-            />
+              display='flex'
+              justifyContent='center'
+              alignItems='center'
+              sx={{
+                width: '100%',
+                height: '100%',
+                border: 4,
+                pt: 5}}
+            >
+              <Stack>
+                <Typography>Types(s): Fire, Flying</Typography>
+                <Typography>Gen: 1</Typography>
+                <Typography>Evolution: 3</Typography>
+              </Stack>
+            </Box>
             <Typography sx={{
               pt: 5, pb: 5
               }}>
                 Who's that Pokemon?
             </Typography>
+            <Box>
+              (/*Add boxes here */)
+            </Box>
             <TextField id="filled-basic" label="Enter a Guess!" variant="filled" />
             <Button variant="submit" sx={{p: 2}}>Submit</Button>
+
+            <Box sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              '& > :not(style)': {
+                m: 1,
+                width: 30,
+                height: 30,
+              },
+            }}>
+              <Paper variant="outlined" sx={{backgroundColor: "white"}}/>
+              <Paper variant="outlined" sx={{backgroundColor: "white"}}/>
+              <Paper variant="outlined" sx={{backgroundColor: "white"}}/>
+              <Paper variant="outlined" sx={{backgroundColor: "white"}}/>
+            </Box>
           </Grid>
         </Stack>
           
