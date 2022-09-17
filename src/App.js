@@ -16,10 +16,49 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 
 import Typography from '@mui/material/Typography';
+/*
+fetch('https://pokeapi.co/api/v2/pokemon-form/151')
+  .then((response) => response.json())
+  .then((data) => console.log(data))
+*/
+const pokemon = 'CHARIZARD';
 
-const pokemon = 'Charizard';
+console.log(pokemon);
+const pokemonChar = pokemon.split("");
+const allowedCharacters = 15;
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-let randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+const letterLibrary = [];
+
+function shufflingKnuth(letterArray) {
+  let currentIndex = letterArray.length, randomIndex;
+
+  // while there are still unshuffled elements left
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    [letterArray[currentIndex], letterArray[randomIndex]] = [letterArray[randomIndex], letterArray[currentIndex]]
+  }
+  return letterArray;
+};
+
+function generateRandom() {
+  shufflingKnuth(pokemonChar);
+
+  for (let i=0; i<=pokemon.length; i++) {
+    letterLibrary.push(pokemonChar[i]);
+  }
+  console.log(letterLibrary);
+  letterLibrary.pop();
+  console.log(letterLibrary);
+  const dummyLetters = allowedCharacters-pokemonChar.length;
+
+  for (let d=1; d<=dummyLetters-1; d++){
+    letterLibrary.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
+  }
+};
+
+generateRandom()
 
 const generalTheme = createTheme({
   palette: {
@@ -28,16 +67,6 @@ const generalTheme = createTheme({
 });
 
 export default function App() {
-
-  const getLetterLibrary = () => {
-    let letterLibrary = [];
-    for (let i=0; i <= 12; i++) {
-      letterLibrary.push(randomLetter);
-    };
-    for (let i=0; i <= 12; i++) {
-      <Button variant="outlined" size="medium">letterLibrary[i]</Button>
-    }
-  }
   return (
     <ThemeProvider theme={generalTheme}>
       <CssBaseline />
@@ -52,7 +81,7 @@ export default function App() {
                 sx={{ mr: 2 }}
                 >
                   <MenuIcon />
-              </IconButton>
+-              </IconButton>
               <Typography variant="h5" 
                 component="div" 
                 align="center" 
@@ -77,13 +106,13 @@ export default function App() {
               sx={{
                 width: '100%',
                 height: '100%',
-                border: 4,
                 pt: 5}}
             >
               <Stack>
                 <Typography>Types(s): Fire, Flying</Typography>
                 <Typography>Gen: 1</Typography>
                 <Typography>Evolution: 3</Typography>
+                <Typography>Letter #: {pokemon.length}</Typography>
               </Stack>
             </Box>
             <Typography sx={{
@@ -91,9 +120,59 @@ export default function App() {
               }}>
                 Who's that Pokemon?
             </Typography>
-            <Box>
-              (/*Add boxes here */)
-            </Box>
+            
+            <Box sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              '& > :not(style)': {
+                m: 1,
+                width: 30,
+                height: 30,
+              },
+            }}>
+              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{letterLibrary[0]}</Typography>
+              </Paper>
+              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{letterLibrary[1]}</Typography>
+              </Paper>
+              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{letterLibrary[2]}</Typography>
+              </Paper>
+              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{letterLibrary[3]}</Typography>
+              </Paper>
+              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{letterLibrary[4]}</Typography>
+              </Paper>
+              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{letterLibrary[5]}</Typography>
+              </Paper>
+              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{letterLibrary[6]}</Typography>
+              </Paper>
+              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{letterLibrary[7]}</Typography>
+              </Paper>
+              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{letterLibrary[8]}</Typography>
+              </Paper>
+              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{letterLibrary[9]}</Typography>
+              </Paper>
+              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{letterLibrary[10]}</Typography>
+              </Paper>
+              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{letterLibrary[11]}</Typography>
+              </Paper>
+              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{letterLibrary[12]}</Typography>
+              </Paper>
+              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{letterLibrary[13]}</Typography>
+              </Paper>
+            </Box> 
             <TextField id="filled-basic" label="Enter a Guess!" variant="filled" />
             <Button variant="submit" sx={{p: 2}}>Submit</Button>
 
