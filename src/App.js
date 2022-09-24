@@ -16,18 +16,11 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 
 import Typography from '@mui/material/Typography';
-/*
-fetch('https://pokeapi.co/api/v2/pokemon-form/151')
-  .then((response) => response.json())
-  .then((data) => console.log(data))
-*/
-const pokemon = 'CHARIZARD';
 
-console.log(pokemon);
-const pokemonChar = pokemon.split("");
 const allowedCharacters = 15;
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const letterLibrary = [];
+let obj; // variable for resolving the response value
 
 function shufflingKnuth(letterArray) {
   let currentIndex = letterArray.length, randomIndex;
@@ -42,23 +35,33 @@ function shufflingKnuth(letterArray) {
   return letterArray;
 };
 
-function generateRandom() {
-  shufflingKnuth(pokemonChar);
+const stuff = () => 
+  fetch('https://pokeapi.co/api/v2/pokemon-form/151')
+  .then(res => res.json())
+  .then(data => obj = data)
+  .then(() => {
+    let poke = obj['name'].toUpperCase()
+    let pokeChar = poke.split("")
+    generateRandom(pokeChar, poke);
+  });
+
+function generateRandom(pokemonChar, pokemon) {
 
   for (let i=0; i<=pokemon.length; i++) {
     letterLibrary.push(pokemonChar[i]);
   }
-  console.log(letterLibrary);
   letterLibrary.pop();
-  console.log(letterLibrary);
+
   const dummyLetters = allowedCharacters-pokemonChar.length;
 
   for (let d=1; d<=dummyLetters-1; d++){
     letterLibrary.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
   }
+  shufflingKnuth(letterLibrary);
+ 
 };
 
-generateRandom()
+stuff();
 
 const generalTheme = createTheme({
   palette: {
@@ -112,7 +115,6 @@ export default function App() {
                 <Typography>Types(s): Fire, Flying</Typography>
                 <Typography>Gen: 1</Typography>
                 <Typography>Evolution: 3</Typography>
-                <Typography>Letter #: {pokemon.length}</Typography>
               </Stack>
             </Box>
             <Typography sx={{
