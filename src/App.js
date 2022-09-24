@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,52 +18,6 @@ import Paper from '@mui/material/Paper';
 
 import Typography from '@mui/material/Typography';
 
-const allowedCharacters = 15;
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const letterLibrary = [];
-let obj; // variable for resolving the response value
-
-function shufflingKnuth(letterArray) {
-  let currentIndex = letterArray.length, randomIndex;
-
-  // while there are still unshuffled elements left
-  while (currentIndex !== 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    [letterArray[currentIndex], letterArray[randomIndex]] = [letterArray[randomIndex], letterArray[currentIndex]]
-  }
-  return letterArray;
-};
-
-const stuff = () => 
-  fetch('https://pokeapi.co/api/v2/pokemon-form/151')
-  .then(res => res.json())
-  .then(data => obj = data)
-  .then(() => {
-    let poke = obj['name'].toUpperCase()
-    let pokeChar = poke.split("")
-    generateRandom(pokeChar, poke);
-  });
-
-function generateRandom(pokemonChar, pokemon) {
-
-  for (let i=0; i<=pokemon.length; i++) {
-    letterLibrary.push(pokemonChar[i]);
-  }
-  letterLibrary.pop();
-
-  const dummyLetters = allowedCharacters-pokemonChar.length;
-
-  for (let d=1; d<=dummyLetters-1; d++){
-    letterLibrary.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
-  }
-  shufflingKnuth(letterLibrary);
- 
-};
-
-stuff();
-
 const generalTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -70,6 +25,58 @@ const generalTheme = createTheme({
 });
 
 export default function App() {
+  
+  const [loading, setLoading] = useState(false);
+
+  const allowedCharacters = 15;
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let letterLibrary = [];
+
+  let obj; // variable for resolving the response value
+
+  const runAPI = () => 
+  fetch('https://pokeapi.co/api/v2/pokemon-form/151')
+  .then(res => res.json())
+  .then(data => obj = data)
+  .then(() => {
+    let poke = obj['name'].toUpperCase()
+    setLoading(true);
+    let pokeChar = poke.split("")
+    generateRandom(pokeChar, poke);
+  });
+
+  function shufflingKnuth(letterArray) {
+    let currentIndex = letterArray.length, randomIndex;
+
+    // while there are still unshuffled elements left
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      [letterArray[currentIndex], letterArray[randomIndex]] = [letterArray[randomIndex], letterArray[currentIndex]]
+    }
+    // console.log(letterArray)
+    return letterArray;
+  };
+
+  function generateRandom(pokemonChar, pokemon) {
+
+    for (let i=0; i<=pokemon.length; i++) {
+      letterLibrary.push(pokemonChar[i]);
+    }
+    letterLibrary.pop();
+
+    const dummyLetters = allowedCharacters-pokemonChar.length;
+
+    for (let d=1; d<=dummyLetters-1; d++){
+      letterLibrary.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
+    }
+    shufflingKnuth(letterLibrary);
+    
+  };
+
+  runAPI();
+  console.log(letterLibrary)
   return (
     <ThemeProvider theme={generalTheme}>
       <CssBaseline />
@@ -84,12 +91,15 @@ export default function App() {
                 sx={{ mr: 2 }}
                 >
                   <MenuIcon />
--              </IconButton>
+              </IconButton>
               <Typography variant="h5" 
                 component="div" 
                 align="center" 
                 sx={{flexGrow: 1}}>
-                  Poke-dle!
+                  PokedleGuessrv2!
+              </Typography>
+              <Typography>
+                {loading ? <>Loading..</> : <>Search</>}
               </Typography>
             </Toolbar>
           </AppBar>
