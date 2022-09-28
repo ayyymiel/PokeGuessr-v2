@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Suspense } from 'react';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -16,6 +17,7 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 
 import Typography from '@mui/material/Typography';
+const LetterBox = React.lazy(() => import("./OtherComponents/Letters"));
 
 const allowedCharacters = 15;
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -31,6 +33,7 @@ fetch('https://pokeapi.co/api/v2/pokemon-form/151')
   let poke = obj['name'].toUpperCase()
   let pokeChar = poke.split("")
   generateRandom(pokeChar, poke);
+  console.log(poke);
 });
 
 function shufflingKnuth(letterArray) {
@@ -93,7 +96,7 @@ export default function App() {
                 component="div" 
                 align="center" 
                 sx={{flexGrow: 1}}>
-                  PokedleGuessrv2!
+                  PokeGuessrv2!
               </Typography>
             </Toolbar>
           </AppBar>
@@ -121,64 +124,14 @@ export default function App() {
                 <Typography>Evolution: 3</Typography>
               </Stack>
             </Box>
+            <Suspense fallback={<div>Loading...</div>}>
+              <LetterBox fromLetterList={letterLibrary}/>
+            </Suspense>
             <Typography sx={{
               pt: 5, pb: 5
               }}>
                 Who's that Pokemon?
             </Typography>
-            
-            <Box sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              '& > :not(style)': {
-                m: 1,
-                width: 30,
-                height: 30,
-              },
-            }}>
-              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-                <Typography>{letterLibrary[0]}</Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-                <Typography>{letterLibrary[1]}</Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-                <Typography>{letterLibrary[2]}</Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-                <Typography>{letterLibrary[3]}</Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-                <Typography>{letterLibrary[4]}</Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-                <Typography>{letterLibrary[5]}</Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-                <Typography>{letterLibrary[6]}</Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-                <Typography>{letterLibrary[7]}</Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-                <Typography>{letterLibrary[8]}</Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-                <Typography>{letterLibrary[9]}</Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-                <Typography>{letterLibrary[10]}</Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-                <Typography>{letterLibrary[11]}</Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-                <Typography>{letterLibrary[12]}</Typography>
-              </Paper>
-              <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-                <Typography>{letterLibrary[13]}</Typography>
-              </Paper>
-            </Box> 
             <TextField id="filled-basic" label="Enter a Guess!" variant="filled" />
             <Button variant="submit" sx={{p: 2}}>Submit</Button>
 
