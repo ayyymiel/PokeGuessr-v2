@@ -33,7 +33,7 @@ fetch('https://pokeapi.co/api/v2/pokemon-form/151')
   let poke = obj['name'].toUpperCase()
   let pokeChar = poke.split("")
   generateRandom(pokeChar, poke);
-  console.log(poke);
+  // console.log(poke);
 });
 
 function shufflingKnuth(letterArray) {
@@ -67,7 +67,7 @@ function generateRandom(pokemonChar, pokemon) {
 };
 
 runAPI();
-console.log(letterLibrary)
+// console.log(letterLibrary)
 
 const generalTheme = createTheme({
   palette: {

@@ -4,7 +4,15 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
 function myLetterBox(fromLetterList) {
-    console.log(fromLetterList);
+    const letterBoxes = [];
+
+    for (let boxNum=0; boxNum <= 13; boxNum++) {
+        letterBoxes.push(
+            <Paper key={boxNum} variant="outlined" sx={{backgroundColor: "black"}}>
+                <Typography>{fromLetterList.fromLetterList[boxNum]}</Typography>
+            </Paper>
+        );
+    }
     return(
         <Box sx={{
             display: 'flex',
@@ -15,9 +23,7 @@ function myLetterBox(fromLetterList) {
             height: 30,
             },
         }}>
-            <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-            <Typography>{fromLetterList.fromLetterList[0]}</Typography>
-            </Paper>
+            {letterBoxes}
         </Box> 
 )}; 
 
