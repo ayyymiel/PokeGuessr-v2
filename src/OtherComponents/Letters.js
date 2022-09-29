@@ -16,7 +16,7 @@ function myLetterBox(fromLetterList) {
             },
         }}>
             <Paper variant="outlined" sx={{backgroundColor: "black"}}>
-            <Typography>fromLetterList</Typography>
+            <Typography>{fromLetterList.fromLetterList[0]}</Typography>
             </Paper>
         </Box> 
 )}; 
