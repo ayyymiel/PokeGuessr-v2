@@ -18,10 +18,12 @@ import Paper from '@mui/material/Paper';
 
 import Typography from '@mui/material/Typography';
 const LetterBox = React.lazy(() => import("./OtherComponents/Letters"));
+const HintArea = React.lazy(() => import("./OtherComponents/Hints"));
 
 const allowedCharacters = 15;
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 let letterLibrary = [];
+let hintsLibrary = [];
 
 let obj; // variable for resolving the response value
 
@@ -30,10 +32,13 @@ fetch('https://pokeapi.co/api/v2/pokemon-form/151')
 .then(res => res.json())
 .then(data => obj = data)
 .then(() => {
-  let poke = obj['name'].toUpperCase()
-  let pokeChar = poke.split("")
+  let poke = obj['name'].toUpperCase();
+  let pokeChar = poke.split("");
+  let pokeType = obj['types']['0']['type']['name'];
+  let pokeID = obj['id'];
+  let pokeSprite = obj['sprites']['front_default'];
   generateRandom(pokeChar, poke);
-  // console.log(poke);
+  hintsLibrary.push(pokeType, pokeID, pokeSprite);
 });
 
 function shufflingKnuth(letterArray) {
@@ -107,24 +112,9 @@ export default function App() {
             container
             direction="column"
             justifyContent="center"
-            alignItems="center"
-          >
-            <Box
-              display='flex'
-              justifyContent='center'
-              alignItems='center'
-              sx={{
-                width: '100%',
-                height: '100%',
-                pt: 5}}
-            >
-              <Stack>
-                <Typography>Types(s): Fire, Flying</Typography>
-                <Typography>Gen: 1</Typography>
-                <Typography>Evolution: 3</Typography>
-              </Stack>
-            </Box>
+            alignItems="center">
             <Suspense fallback={<div>Loading...</div>}>
+              <HintArea getPokeDetails={hintsLibrary}/>
               <LetterBox fromLetterList={letterLibrary}/>
             </Suspense>
             <Typography sx={{
