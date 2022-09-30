@@ -24,11 +24,12 @@ const allowedCharacters = 15;
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 let letterLibrary = [];
 let hintsLibrary = [];
+const randomNumber = Math.round(Math.random() * 151);
 
 let obj; // variable for resolving the response value
 
 const runAPI = () => 
-fetch('https://pokeapi.co/api/v2/pokemon-form/151')
+fetch(`https://pokeapi.co/api/v2/pokemon-form/${randomNumber}`)
 .then(res => res.json())
 .then(data => obj = data)
 .then(() => {
@@ -39,6 +40,7 @@ fetch('https://pokeapi.co/api/v2/pokemon-form/151')
   let pokeSprite = obj['sprites']['front_default'];
   generateRandom(pokeChar, poke);
   hintsLibrary.push(pokeType, pokeID, pokeSprite);
+  // TODO: sometimes doesn't load fast enough when components load
 });
 
 function shufflingKnuth(letterArray) {
@@ -115,6 +117,8 @@ export default function App() {
             alignItems="center">
             <Suspense fallback={<div>Loading...</div>}>
               <HintArea getPokeDetails={hintsLibrary}/>
+            </Suspense>
+            <Suspense fallback={<div>Loading...</div>}>
               <LetterBox fromLetterList={letterLibrary}/>
             </Suspense>
             <Typography sx={{
