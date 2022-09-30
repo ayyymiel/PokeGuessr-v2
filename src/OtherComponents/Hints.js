@@ -4,7 +4,6 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 function myHints(getPokeDetails) {
-    console.log(getPokeDetails)
     return(
         <Box
             display='flex'
