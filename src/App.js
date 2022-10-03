@@ -28,6 +28,7 @@ const randomNumber = Math.round(Math.random() * 151);
 
 let obj; // variable for resolving the response value
 
+// TODO: ADD AXIOS HERE
 const runAPI = () => 
 fetch(`https://pokeapi.co/api/v2/pokemon-form/${randomNumber}`)
 .then(res => res.json())
