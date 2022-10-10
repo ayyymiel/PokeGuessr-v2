@@ -1,5 +1,9 @@
 import * as React from 'react';
-import { Suspense } from 'react';
+import { useState, useEffect } from 'react';
+import myHints from "./OtherComponents/Hints";
+import myLetters from "./OtherComponents/Letters";
+
+import axios from 'axios';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,32 +21,12 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 
 import Typography from '@mui/material/Typography';
-const LetterBox = React.lazy(() => import("./OtherComponents/Letters"));
-const HintArea = React.lazy(() => import("./OtherComponents/Hints"));
 
 const allowedCharacters = 15;
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 let letterLibrary = [];
 let hintsLibrary = [];
 const randomNumber = Math.round(Math.random() * 151);
-
-let obj; // variable for resolving the response value
-
-// TODO: ADD AXIOS HERE
-const runAPI = () => 
-fetch(`https://pokeapi.co/api/v2/pokemon-form/${randomNumber}`)
-.then(res => res.json())
-.then(data => obj = data)
-.then(() => {
-  let poke = obj['name'].toUpperCase();
-  let pokeChar = poke.split("");
-  let pokeType = obj['types']['0']['type']['name'];
-  let pokeID = obj['id'];
-  let pokeSprite = obj['sprites']['front_default'];
-  generateRandom(pokeChar, poke);
-  hintsLibrary.push(pokeType, pokeID, pokeSprite);
-  // TODO: sometimes doesn't load fast enough when components load
-});
 
 function shufflingKnuth(letterArray) {
   let currentIndex = letterArray.length, randomIndex;
@@ -54,7 +38,6 @@ function shufflingKnuth(letterArray) {
 
     [letterArray[currentIndex], letterArray[randomIndex]] = [letterArray[randomIndex], letterArray[currentIndex]]
   }
-  // console.log(letterArray)
   return letterArray;
 };
 
@@ -71,11 +54,9 @@ function generateRandom(pokemonChar, pokemon) {
     letterLibrary.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
   }
   shufflingKnuth(letterLibrary);
+  return(letterLibrary);
   
 };
-
-runAPI();
-// console.log(letterLibrary)
 
 const generalTheme = createTheme({
   palette: {
@@ -84,7 +65,35 @@ const generalTheme = createTheme({
 });
 
 export default function App() {
+  
+  const [pokeHints, setPokeHints] = useState(null);
+  const [loading, setLoading] = useState(false);
 
+  const pokeFunction = async () => {
+    try {
+      const pokeData = await axios.get(`https://pokeapi.co/api/v2/pokemon-form/${randomNumber}`)
+      .then(res => {
+        let poke = res.data.name;
+        let pokeUpper = poke.toUpperCase();
+        let pokeChar = pokeUpper.split("");
+        let pokeType = res.data.type;
+        let pokeID = res.data.id;
+        let pokeSprite = res.data.sprites.front_default;
+        generateRandom(pokeChar, poke);
+        hintsLibrary.push(pokeType, pokeID, pokeSprite);
+        console.log(hintsLibrary);
+        // setPokeHints(myHints(hintsLibrary));
+      });
+      setLoading(true);
+    } catch (e) {
+      console.log(e)
+    }
+  };
+  
+  useEffect(() => {
+    pokeFunction()
+  });
+  
   return (
     <ThemeProvider theme={generalTheme}>
       <CssBaseline />
@@ -116,12 +125,12 @@ export default function App() {
             direction="column"
             justifyContent="center"
             alignItems="center">
-            <Suspense fallback={<div>Loading...</div>}>
+            {/* <Suspense fallback={<div>Loading...</div>}>
               <HintArea getPokeDetails={hintsLibrary}/>
-            </Suspense>
-            <Suspense fallback={<div>Loading...</div>}>
-              <LetterBox fromLetterList={letterLibrary}/>
-            </Suspense>
+            </Suspense> */}
+            <div>
+              {loading ? (pokeHints) : "Loading..."}
+            </div>
             <Typography sx={{
               pt: 5, pb: 5
               }}>
@@ -146,7 +155,6 @@ export default function App() {
             </Box>
           </Grid>
         </Stack>
-          
     </ThemeProvider>
   );
 }
