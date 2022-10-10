@@ -82,7 +82,7 @@ export default function App() {
         generateRandom(pokeChar, poke);
         hintsLibrary.push(pokeType, pokeID, pokeSprite);
         console.log(hintsLibrary);
-        // setPokeHints(myHints(hintsLibrary));
+        setPokeHints(res.data.name);
       });
       setLoading(true);
     } catch (e) {
@@ -129,8 +129,28 @@ export default function App() {
               <HintArea getPokeDetails={hintsLibrary}/>
             </Suspense> */}
             <div>
-              {loading ? (pokeHints) : "Loading..."}
+              
             </div>
+            <Box
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+            sx={{
+            width: '100%',
+            height: '100%',
+            pt: 5}}>
+                <Stack>
+                    <Typography>Types(s): {loading ? (pokeHints) : "Loading..."}</Typography>
+                    {/* <Typography>Pokemon No.: {getPokeDetails.getPokeDetails[1]}</Typography>
+                    <Box sx={{
+                        display: 'flex',
+                        width: '100%',
+                        height: '100%',
+                    }}
+                    component="img"
+                    src={getPokeDetails.getPokeDetails[2]}/> */}
+                </Stack>
+            </Box>
             <Typography sx={{
               pt: 5, pb: 5
               }}>
