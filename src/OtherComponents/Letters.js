@@ -24,7 +24,7 @@ function myLetterBox(fromLetterList) {
             },
         }}>
             {letterBoxes}
-        </Box> 
+        </Box>
 )}; 
 
 export default myLetterBox;
