@@ -35,6 +35,7 @@ function myLetterBox(fromLetterList) {
           </Paper>
       );
   }
+  return letterBoxes;
 };
 
 function shufflingKnuth(letterArray) {
@@ -76,7 +77,7 @@ export default function App() {
   
   const [pokeID, setPokeID] = useState(null);
   const [pokeSprite, setPokeSprite] = useState(null);
-  // const [pokeLetters, setPokeLetters] = useState(null);
+  const [pokeLetters, setPokeLetters] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const pokeFunction = async () => {
@@ -89,9 +90,9 @@ export default function App() {
         let pokeID = res.data.id;
         let pokeSprite = res.data.sprites.front_default;
         generateRandom(pokeChar, poke);
-        console.log('hi');
         setPokeID(pokeID);
         setPokeSprite(pokeSprite);
+        setPokeLetters(letterLibrary);
       });
       setLoading(true);
     } catch (e) {
@@ -141,17 +142,28 @@ export default function App() {
             width: '100%',
             height: '100%',
             pt: 5}}>
-                <Stack>
+                <Stack sx={{alignItems: 'center'}}>
                     <Typography>ID: {loading ? (pokeID) : "Loading..."}</Typography>
-                    {/* <Typography>Pokemon No.: {getPokeDetails.getPokeDetails[1]}</Typography> */}
+
                     <Box sx={{
                         display: 'flex',
-                        width: '100%',
-                        height: '100%',
+                        width: '200px',
+                        height: '200px',
                     }}
                     component="img"
                     src={loading ? (pokeSprite) : "Loading..."}/>
 
+                    <Box sx={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      '& > :not(style)': {
+                      m: 1,
+                      width: 30,
+                      height: 30,
+                      },
+                    }}>
+                      {loading ? (myLetterBox(pokeLetters)) : "Loading..."}
+                    </Box>
                 </Stack>
             </Box>
             <Typography sx={{
