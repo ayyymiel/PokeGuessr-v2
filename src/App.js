@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Suspense } from 'react';
+import { useState, useEffect } from 'react';
+
+import axios from 'axios';
 
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,31 +19,24 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 
 import Typography from '@mui/material/Typography';
-const LetterBox = React.lazy(() => import("./OtherComponents/Letters"));
-const HintArea = React.lazy(() => import("./OtherComponents/Hints"));
 
 const allowedCharacters = 15;
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 let letterLibrary = [];
-let hintsLibrary = [];
 const randomNumber = Math.round(Math.random() * 151);
 
-let obj; // variable for resolving the response value
+function myLetterBox(fromLetterList) {
+  const letterBoxes = [];
 
-const runAPI = () => 
-fetch(`https://pokeapi.co/api/v2/pokemon-form/${randomNumber}`)
-.then(res => res.json())
-.then(data => obj = data)
-.then(() => {
-  let poke = obj['name'].toUpperCase();
-  let pokeChar = poke.split("");
-  let pokeType = obj['types']['0']['type']['name'];
-  let pokeID = obj['id'];
-  let pokeSprite = obj['sprites']['front_default'];
-  generateRandom(pokeChar, poke);
-  hintsLibrary.push(pokeType, pokeID, pokeSprite);
-  // TODO: sometimes doesn't load fast enough when components load
-});
+  for (let boxNum=0; boxNum <= 13; boxNum++) {
+      letterBoxes.push(
+          <Paper key={boxNum} variant="outlined" sx={{backgroundColor: "black"}}>
+              <Typography>{fromLetterList[boxNum]}</Typography>
+          </Paper>
+      );
+  }
+  return letterBoxes;
+};
 
 function shufflingKnuth(letterArray) {
   let currentIndex = letterArray.length, randomIndex;
@@ -53,8 +48,8 @@ function shufflingKnuth(letterArray) {
 
     [letterArray[currentIndex], letterArray[randomIndex]] = [letterArray[randomIndex], letterArray[currentIndex]]
   }
-  // console.log(letterArray)
-  return letterArray;
+  console.log(letterArray)
+  myLetterBox(letterArray);
 };
 
 function generateRandom(pokemonChar, pokemon) {
@@ -70,11 +65,7 @@ function generateRandom(pokemonChar, pokemon) {
     letterLibrary.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
   }
   shufflingKnuth(letterLibrary);
-  
 };
-
-runAPI();
-// console.log(letterLibrary)
 
 const generalTheme = createTheme({
   palette: {
@@ -83,7 +74,35 @@ const generalTheme = createTheme({
 });
 
 export default function App() {
+  
+  const [pokeID, setPokeID] = useState(null);
+  const [pokeSprite, setPokeSprite] = useState(null);
+  const [pokeLetters, setPokeLetters] = useState(null);
+  const [loading, setLoading] = useState(false);
 
+  const pokeFunction = async () => {
+    try {
+      await axios.get(`https://pokeapi.co/api/v2/pokemon-form/${randomNumber}`)
+      .then(res => {
+        let poke = res.data.name;
+        let pokeUpper = poke.toUpperCase();
+        let pokeChar = pokeUpper.split("");
+        let pokeID = res.data.id;
+        let pokeSprite = res.data.sprites.front_default;
+        generateRandom(pokeChar, poke);
+        setPokeID(pokeID);
+        setPokeSprite(pokeSprite);
+        setPokeLetters(letterLibrary);
+      });
+      setLoading(true);
+    } catch (e) {
+      console.log(e)
+    }
+  };
+  useEffect(() => {
+    pokeFunction();
+  }, []); // WHY DOES ADDING THIS LIST HERE WORK
+  
   return (
     <ThemeProvider theme={generalTheme}>
       <CssBaseline />
@@ -115,12 +134,38 @@ export default function App() {
             direction="column"
             justifyContent="center"
             alignItems="center">
-            <Suspense fallback={<div>Loading...</div>}>
-              <HintArea getPokeDetails={hintsLibrary}/>
-            </Suspense>
-            <Suspense fallback={<div>Loading...</div>}>
-              <LetterBox fromLetterList={letterLibrary}/>
-            </Suspense>
+            <Box
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+            sx={{
+            width: '100%',
+            height: '100%',
+            pt: 5}}>
+                <Stack sx={{alignItems: 'center'}}>
+                    <Typography>ID: {loading ? (pokeID) : "Loading..."}</Typography>
+
+                    <Box sx={{
+                        display: 'flex',
+                        width: '200px',
+                        height: '200px',
+                    }}
+                    component="img"
+                    src={loading ? (pokeSprite) : "Loading..."}/>
+
+                    <Box sx={{
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      '& > :not(style)': {
+                      m: 1,
+                      width: 30,
+                      height: 30,
+                      },
+                    }}>
+                      {loading ? (myLetterBox(pokeLetters)) : "Loading..."}
+                    </Box>
+                </Stack>
+            </Box>
             <Typography sx={{
               pt: 5, pb: 5
               }}>
@@ -145,7 +190,6 @@ export default function App() {
             </Box>
           </Grid>
         </Stack>
-          
     </ThemeProvider>
   );
 }
