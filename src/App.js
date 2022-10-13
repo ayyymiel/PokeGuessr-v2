@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import myHints from "./OtherComponents/Hints";
-import myLetters from "./OtherComponents/Letters";
 
 import axios from 'axios';
 
@@ -25,8 +23,19 @@ import Typography from '@mui/material/Typography';
 const allowedCharacters = 15;
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 let letterLibrary = [];
-let hintsLibrary = [];
 const randomNumber = Math.round(Math.random() * 151);
+
+function myLetterBox(fromLetterList) {
+  const letterBoxes = [];
+
+  for (let boxNum=0; boxNum <= 13; boxNum++) {
+      letterBoxes.push(
+          <Paper key={boxNum} variant="outlined" sx={{backgroundColor: "black"}}>
+              <Typography>{fromLetterList[boxNum]}</Typography>
+          </Paper>
+      );
+  }
+};
 
 function shufflingKnuth(letterArray) {
   let currentIndex = letterArray.length, randomIndex;
@@ -38,7 +47,8 @@ function shufflingKnuth(letterArray) {
 
     [letterArray[currentIndex], letterArray[randomIndex]] = [letterArray[randomIndex], letterArray[currentIndex]]
   }
-  return letterArray;
+  console.log(letterArray)
+  myLetterBox(letterArray);
 };
 
 function generateRandom(pokemonChar, pokemon) {
@@ -54,8 +64,6 @@ function generateRandom(pokemonChar, pokemon) {
     letterLibrary.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
   }
   shufflingKnuth(letterLibrary);
-  return(letterLibrary);
-  
 };
 
 const generalTheme = createTheme({
@@ -66,33 +74,33 @@ const generalTheme = createTheme({
 
 export default function App() {
   
-  const [pokeHints, setPokeHints] = useState(null);
+  const [pokeID, setPokeID] = useState(null);
+  const [pokeSprite, setPokeSprite] = useState(null);
+  // const [pokeLetters, setPokeLetters] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const pokeFunction = async () => {
     try {
-      const pokeData = await axios.get(`https://pokeapi.co/api/v2/pokemon-form/${randomNumber}`)
+      await axios.get(`https://pokeapi.co/api/v2/pokemon-form/${randomNumber}`)
       .then(res => {
         let poke = res.data.name;
         let pokeUpper = poke.toUpperCase();
         let pokeChar = pokeUpper.split("");
-        let pokeType = res.data.type;
         let pokeID = res.data.id;
         let pokeSprite = res.data.sprites.front_default;
         generateRandom(pokeChar, poke);
-        hintsLibrary.push(pokeType, pokeID, pokeSprite);
-        console.log(hintsLibrary);
-        setPokeHints(res.data.name);
+        console.log('hi');
+        setPokeID(pokeID);
+        setPokeSprite(pokeSprite);
       });
       setLoading(true);
     } catch (e) {
       console.log(e)
     }
   };
-  
   useEffect(() => {
-    pokeFunction()
-  });
+    pokeFunction();
+  }, []); // WHY DOES ADDING THIS LIST HERE WORK
   
   return (
     <ThemeProvider theme={generalTheme}>
@@ -125,12 +133,6 @@ export default function App() {
             direction="column"
             justifyContent="center"
             alignItems="center">
-            {/* <Suspense fallback={<div>Loading...</div>}>
-              <HintArea getPokeDetails={hintsLibrary}/>
-            </Suspense> */}
-            <div>
-              
-            </div>
             <Box
             display='flex'
             justifyContent='center'
@@ -140,15 +142,16 @@ export default function App() {
             height: '100%',
             pt: 5}}>
                 <Stack>
-                    <Typography>Types(s): {loading ? (pokeHints) : "Loading..."}</Typography>
-                    {/* <Typography>Pokemon No.: {getPokeDetails.getPokeDetails[1]}</Typography>
+                    <Typography>ID: {loading ? (pokeID) : "Loading..."}</Typography>
+                    {/* <Typography>Pokemon No.: {getPokeDetails.getPokeDetails[1]}</Typography> */}
                     <Box sx={{
                         display: 'flex',
                         width: '100%',
                         height: '100%',
                     }}
                     component="img"
-                    src={getPokeDetails.getPokeDetails[2]}/> */}
+                    src={loading ? (pokeSprite) : "Loading..."}/>
+
                 </Stack>
             </Box>
             <Typography sx={{
