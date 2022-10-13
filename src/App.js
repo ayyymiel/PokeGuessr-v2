@@ -48,7 +48,6 @@ function shufflingKnuth(letterArray) {
 
     [letterArray[currentIndex], letterArray[randomIndex]] = [letterArray[randomIndex], letterArray[currentIndex]]
   }
-  console.log(letterArray)
   myLetterBox(letterArray);
 };
 
@@ -78,6 +77,8 @@ export default function App() {
   const [pokeID, setPokeID] = useState(null);
   const [pokeSprite, setPokeSprite] = useState(null);
   const [pokeLetters, setPokeLetters] = useState(null);
+  const [initGuess, setInitGuess] = useState('');
+  const [pokeAns, setPokeAns] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const pokeFunction = async () => {
@@ -89,10 +90,12 @@ export default function App() {
         let pokeChar = pokeUpper.split("");
         let pokeID = res.data.id;
         let pokeSprite = res.data.sprites.front_default;
+        let pokeName = res.data.name;
         generateRandom(pokeChar, poke);
         setPokeID(pokeID);
         setPokeSprite(pokeSprite);
         setPokeLetters(letterLibrary);
+        setPokeAns(pokeName);
       });
       setLoading(true);
     } catch (e) {
@@ -102,6 +105,17 @@ export default function App() {
   useEffect(() => {
     pokeFunction();
   }, []); // WHY DOES ADDING THIS LIST HERE WORK
+  
+  function answerChecker() {
+    let initGuessLower;
+    initGuessLower = initGuess.toLowerCase();
+    if (initGuessLower === pokeAns) {
+      alert('Good Job!');
+      window.location.reload(false);
+    } else {
+      alert('Try again!');
+    }
+  }
   
   return (
     <ThemeProvider theme={generalTheme}>
@@ -166,13 +180,20 @@ export default function App() {
                     </Box>
                 </Stack>
             </Box>
+            
             <Typography sx={{
               pt: 5, pb: 5
               }}>
                 Who's that Pokemon?
             </Typography>
-            <TextField id="filled-basic" label="Enter a Guess!" variant="filled" />
-            <Button variant="submit" sx={{p: 2}}>Submit</Button>
+            
+            <TextField value={initGuess} 
+              id="filled-basic" 
+              label="Enter a Guess!" 
+              variant="filled" 
+              onChange={(event) => setInitGuess(event.target.value)}/>
+
+            <Button variant="submit" sx={{p: 2}} onClick={answerChecker}>Submit</Button>
 
             <Box sx={{
               display: 'flex',
@@ -183,10 +204,10 @@ export default function App() {
                 height: 30,
               },
             }}>
+              {/* <Paper variant="outlined" sx={{backgroundColor: "white"}}/>
               <Paper variant="outlined" sx={{backgroundColor: "white"}}/>
               <Paper variant="outlined" sx={{backgroundColor: "white"}}/>
-              <Paper variant="outlined" sx={{backgroundColor: "white"}}/>
-              <Paper variant="outlined" sx={{backgroundColor: "white"}}/>
+              <Paper variant="outlined" sx={{backgroundColor: "white"}}/> */}
             </Box>
           </Grid>
         </Stack>
