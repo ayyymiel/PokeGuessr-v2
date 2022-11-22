@@ -10,15 +10,15 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 
 import Typography from '@mui/material/Typography';
+
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const allowedCharacters = 15;
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -30,8 +30,8 @@ function myLetterBox(fromLetterList) {
 
   for (let boxNum=0; boxNum <= 13; boxNum++) {
       letterBoxes.push(
-          <Paper key={boxNum} variant="outlined" sx={{backgroundColor: "black"}}>
-              <Typography>{fromLetterList[boxNum]}</Typography>
+          <Paper key={boxNum} variant="outlined" sx={{backgroundColor: "black", textAlign: "center"}}>
+              <p style={{"fontFamily": "pokemonFont"}}>{fromLetterList[boxNum]}</p>
           </Paper>
       );
   }
@@ -120,28 +120,27 @@ export default function App() {
   return (
     <ThemeProvider theme={generalTheme}>
       <CssBaseline />
-        <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static">
-            <Toolbar>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-                >
-                  <MenuIcon />
-              </IconButton>
-              <Typography variant="h5" 
-                component="div" 
-                align="center" 
-                sx={{flexGrow: 1}}>
-                  PokeGuessrv2!
-              </Typography>
-            </Toolbar>
-          </AppBar>
-        </Box>
-
+      <Container fluid style={{"border-bottom": "1px solid white"}}>
+        <Row>
+          <Col>
+            <h2 style={{"paddingTop": 20, 
+            "paddingLeft": 20,
+            "paddingBottom": 20,
+            "fontFamily": "pokemonFont"}}>PokeGuessr!</h2>
+          </Col>
+          <Col>
+            <a href="https://github.com/ayyymiel/PokeGuessr-v2">
+              <img src={require("./themesAndPics/github-png.png")} 
+              alt="GitHub Logo"
+              style={{"paddingTop": 30, 
+              "paddingRight": 20,
+              "height": 60}}
+              align="right"
+              />
+            </a>
+          </Col>
+        </Row>
+      </Container>
         <Stack>
           <Grid
             container
@@ -194,21 +193,6 @@ export default function App() {
               onChange={(event) => setInitGuess(event.target.value)}/>
 
             <Button variant="submit" sx={{p: 2}} onClick={answerChecker}>Submit</Button>
-
-            <Box sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              '& > :not(style)': {
-                m: 1,
-                width: 30,
-                height: 30,
-              },
-            }}>
-              {/* <Paper variant="outlined" sx={{backgroundColor: "white"}}/>
-              <Paper variant="outlined" sx={{backgroundColor: "white"}}/>
-              <Paper variant="outlined" sx={{backgroundColor: "white"}}/>
-              <Paper variant="outlined" sx={{backgroundColor: "white"}}/> */}
-            </Box>
           </Grid>
         </Stack>
     </ThemeProvider>
