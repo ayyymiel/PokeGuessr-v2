@@ -1,6 +1,6 @@
 # A Pokemon Guessing Game
 
-From a series of hints, guess what the Pokemon is!
+Guess the Pokemon from its Sprite!
 
 ### URL:
 https://pokeguessr-556b1.web.app/
