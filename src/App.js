@@ -6,19 +6,13 @@ import axios from 'axios';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
-
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
-
-import Typography from '@mui/material/Typography';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
 
 const allowedCharacters = 15;
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -30,9 +24,11 @@ function myLetterBox(fromLetterList) {
 
   for (let boxNum=0; boxNum <= 13; boxNum++) {
       letterBoxes.push(
-          <Paper key={boxNum} variant="outlined" sx={{backgroundColor: "black", textAlign: "center"}}>
+        <Col className="d-flex">
+          <Card.Body className="flex-fill" key={boxNum} variant="outlined" sx={{backgroundColor: "black", textAlign: "center"}}>
               <p style={{"fontFamily": "pokemonFont"}}>{fromLetterList[boxNum]}</p>
-          </Paper>
+          </Card.Body>
+        </Col>
       );
   }
   return letterBoxes;
@@ -141,60 +137,36 @@ export default function App() {
           </Col>
         </Row>
       </Container>
-        <Stack>
-          <Grid
-            container
-            direction="column"
-            justifyContent="center"
-            alignItems="center">
-            <Box
-            display='flex'
-            justifyContent='center'
-            alignItems='center'
-            sx={{
-            width: '100%',
-            height: '100%',
-            pt: 5}}>
-                <Stack sx={{alignItems: 'center'}}>
-                    <Typography>ID: {loading ? (pokeID) : "Loading..."}</Typography>
 
-                    <Box sx={{
-                        display: 'flex',
-                        width: '200px',
-                        height: '200px',
-                    }}
-                    component="img"
-                    src={loading ? (pokeSprite) : "Loading..."}/>
+      <Container display flex justify-content-center>
+        <Col>
+          <p>ID: {loading ? (pokeID) : "Loading..."}</p>
 
-                    <Box sx={{
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      '& > :not(style)': {
-                      m: 1,
-                      width: 30,
-                      height: 30,
-                      },
-                    }}>
-                      {loading ? (myLetterBox(pokeLetters)) : "Loading..."}
-                    </Box>
-                </Stack>
-            </Box>
-            
-            <Typography sx={{
-              pt: 5, pb: 5
-              }}>
+          <img 
+            width='200px'
+            height='200px'
+            component="img"
+            src={loading ? (pokeSprite) : "Loading..."} alt="pokemon sprite"/>
+
+          <Row>
+            {loading ? (myLetterBox(pokeLetters)) : "Loading..."}
+          </Row>
+        
+          <Row>
+            <p style={{"padding": "20px"}}>
                 Who's that Pokemon?
-            </Typography>
-            
-            <TextField value={initGuess} 
-              id="filled-basic" 
-              label="Enter a Guess!" 
-              variant="filled" 
-              onChange={(event) => setInitGuess(event.target.value)}/>
+            </p>
+          </Row>
+          
+          <TextField value={initGuess} 
+            id="filled-basic" 
+            label="Enter a Guess!" 
+            variant="filled" 
+            onChange={(event) => setInitGuess(event.target.value)}/>
 
-            <Button variant="submit" sx={{p: 2}} onClick={answerChecker}>Submit</Button>
-          </Grid>
-        </Stack>
+          <Button variant="submit" sx={{p: 2}} onClick={answerChecker}>Submit</Button>
+        </Col>
+      </Container>
     </ThemeProvider>
   );
 }
