@@ -16,3 +16,11 @@ code {
   font-family: 'pokemonFont';
   src: url("./themesAndPics/Pokemon Hollow.ttf") format('truetype');
 }
+
+h2 {
+  color: white
+}
+
+p {
+  color: white
+}

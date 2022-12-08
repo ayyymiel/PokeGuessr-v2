@@ -3,32 +3,35 @@ import { useState, useEffect } from 'react';
 
 import axios from 'axios';
 
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 const allowedCharacters = 15;
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 let letterLibrary = [];
 const randomNumber = Math.round(Math.random() * 151);
 
+document.body.style.backgroundColor = "black";
+
 function myLetterBox(fromLetterList) {
   const letterBoxes = [];
 
   for (let boxNum=0; boxNum <= 13; boxNum++) {
       letterBoxes.push(
-        <Col className="d-flex">
-          <Card.Body className="flex-fill" key={boxNum} variant="outlined" sx={{backgroundColor: "black", textAlign: "center"}}>
-              <p style={{"fontFamily": "pokemonFont"}}>{fromLetterList[boxNum]}</p>
+        <Col>
+          <Card.Body 
+            key={boxNum} 
+            variant="outlined" 
+            style={{
+              backgroundColor: "black", 
+              textAlign: "center"}}>
+              <Card.Text style={{"fontFamily": "pokemonFont"}}>{fromLetterList[boxNum]}</Card.Text>
           </Card.Body>
-        </Col>
+        </Col>  
       );
   }
   return letterBoxes;
@@ -61,12 +64,6 @@ function generateRandom(pokemonChar, pokemon) {
   }
   shufflingKnuth(letterLibrary);
 };
-
-const generalTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  }
-});
 
 export default function App() {
   
@@ -114,8 +111,7 @@ export default function App() {
   }
   
   return (
-    <ThemeProvider theme={generalTheme}>
-      <CssBaseline />
+    <div>
       <Container fluid style={{"border-bottom": "1px solid white"}}>
         <Row>
           <Col>
@@ -138,35 +134,48 @@ export default function App() {
         </Row>
       </Container>
 
-      <Container display flex justify-content-center>
-        <Col>
-          <p>ID: {loading ? (pokeID) : "Loading..."}</p>
-
+      <Container>
+        <Row>  
+          <p className="d-flex justify-content-center">ID: {loading ? (pokeID) : "Loading..."}</p>
+        </Row>
+        
+        <div style={{"text-align": "center"}}>
           <img 
-            width='200px'
-            height='200px'
+            margin="auto"
+            display="block"
+            width="200"
+            height="200"
             component="img"
             src={loading ? (pokeSprite) : "Loading..."} alt="pokemon sprite"/>
-
-          <Row>
-            {loading ? (myLetterBox(pokeLetters)) : "Loading..."}
-          </Row>
+        </div>
         
-          <Row>
-            <p style={{"padding": "20px"}}>
-                Who's that Pokemon?
-            </p>
-          </Row>
-          
-          <TextField value={initGuess} 
-            id="filled-basic" 
-            label="Enter a Guess!" 
-            variant="filled" 
-            onChange={(event) => setInitGuess(event.target.value)}/>
+        <Row>
+          {loading ? (myLetterBox(pokeLetters)) : "Loading..."}
+        </Row>      
+        <p style={{"padding": "20px", "text-align": "center"}}>
+          Who's that Pokemon?
+        </p>
+        
+        <Form>
+          <Form.Group>
+            <Form.Control 
+              type="pokeAns"
+              style={{backgroundColor: "black", color: "white"}}
+              onChange={(event) => setInitGuess(event.target.value)}/>
+          </Form.Group>
+        </Form>
 
-          <Button variant="submit" sx={{p: 2}} onClick={answerChecker}>Submit</Button>
-        </Col>
+        <Button variant="submit"
+          style={{
+            display: "flex",
+            color: "white",
+            marginLeft: "auto",
+            marginRight: "auto",
+            marginTop: "20px"}} 
+          onClick={answerChecker}>
+            Submit
+          </Button>
       </Container>
-    </ThemeProvider>
+    </div>
   );
 }
